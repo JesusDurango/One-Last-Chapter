@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080808" />
+  <title>Un Último Capítulo</title>
+
+  <!-- Tipografías editoriales. Pueden sustituirse por archivos locales si se desea. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black: #080808;
+      --black-soft: #0d0d0d;
+      --gold: #d4af37;
+      --gold-muted: #a98d3d;
+      --ivory: #eee9df;
+      --gray: #aaa59c;
+      --line: rgba(212, 175, 55, 0.32);
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "Montserrat", Arial, sans-serif;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--black); }
+    body {
+      margin: 0;
+      color: var(--ivory);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(212,175,55,.055), transparent 34%),
+        var(--black);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: .09;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+
+    button { font: inherit; }
+
+    /* PORTADA */
+    .opening {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: grid;
+      place-items: center;
+      background: #030303;
+      transition: opacity 1.4s var(--ease), visibility 1.4s;
+    }
+    .opening.hidden { opacity: 0; visibility: hidden; }
+    .opening::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(212,175,55,.055), transparent 28%),
+        radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(0,0,0,.52) 58%, #030303 100%);
+      opacity: 0;
+      transform: scale(1.06);
+    }
+    .opening.is-ready::before {
+      animation: openingLight 5.8s .15s forwards var(--ease);
+    }
+    .opening-inner {
+      position: relative;
+      z-index: 1;
+      width: min(900px, 86vw);
+      text-align: center;
+    }
+    .eyebrow {
+      margin: 0 0 22px;
+      color: var(--gold-muted);
+      font-size: .68rem;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+      opacity: 0;
+      filter: blur(12px);
+      transform: translateY(8px);
+    }
+    .opening.is-ready .eyebrow {
+      animation: shadowFade 1.8s .35s forwards var(--ease);
+    }
+    .opening h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.7rem, 7.5vw, 7.8rem);
+      font-weight: 500;
+      line-height: .98;
+      letter-spacing: .035em;
+      opacity: 0;
+      filter: blur(22px);
+      transform: translateY(18px) scale(.985);
+      text-shadow: 0 0 45px rgba(0,0,0,1), 0 0 18px rgba(212,175,55,.12);
+    }
+    .opening.is-ready h1 {
+      animation: titleFromShadows 2.7s .8s forwards var(--ease);
+    }
+    .opening-line {
+      width: 0;
+      height: 1px;
+      margin: clamp(26px, 4vw, 42px) auto;
+      opacity: 0;
+      filter: blur(4px);
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 0 14px rgba(212,175,55,.18);
+    }
+    .opening.is-ready .opening-line {
+      animation: lineFromDarkness 1.8s 2.75s forwards var(--ease);
+    }
+    .opening-copy {
+      margin: 0 auto;
+      max-width: 660px;
+      color: var(--gray);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.8;
+      opacity: 0;
+      filter: blur(14px);
+      transform: translateY(12px);
+    }
+    .opening.is-ready .opening-copy {
+      animation: shadowFade 2.2s 3.55s forwards var(--ease);
+    }
+    .begin-btn {
+      margin-top: 46px;
+      padding: 14px 28px;
+      border: 1px solid rgba(212,175,55,.72);
+      color: var(--ivory);
+      background: transparent;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      font-size: .7rem;
+      cursor: pointer;
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(10px);
+      transition: background .4s, color .4s, transform .4s;
+    }
+    .opening.is-ready .begin-btn {
+      animation: shadowFade 1.8s 5.05s forwards var(--ease);
+    }
+    .begin-btn:hover { background: var(--gold); color: #080808; transform: translateY(-2px); }
+
+    /* NAVEGACIÓN DISCRETA */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 70;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(212,175,55,.4);
+    }
+    .chapter-indicator {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      z-index: 60;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 14px;
+    }
+    .chapter-indicator a {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(238,233,223,.25);
+      transition: transform .3s, background .3s;
+    }
+    .chapter-indicator a.active { background: var(--gold); transform: scale(1.65); }
+
+    /* ESTRUCTURA NARRATIVA */
+    main { opacity: 0; transition: opacity 1.5s var(--ease); }
+    main.visible { opacity: 1; }
+    section {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-items: center;
+      padding: clamp(76px, 10vw, 140px) clamp(22px, 8vw, 120px);
+      overflow: hidden;
+    }
+    .chapter::after {
+      content: "";
+      position: absolute;
+      inset: 10% 0 auto;
+      height: 70%;
+      z-index: -1;
+      background: radial-gradient(circle, rgba(212,175,55,.035), transparent 64%);
+    }
+    .content {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+    }
+    .section-number {
+      color: var(--gold-muted);
+      font-size: .65rem;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+    }
+    .chapter h2 {
+      margin: 20px 0 0;
+      max-width: 930px;
+      font-family: var(--serif);
+      font-size: clamp(2.35rem, 6vw, 6.7rem);
+      font-weight: 500;
+      line-height: 1.04;
+      text-wrap: balance;
+    }
+    .chapter-intro {
+      max-width: 670px;
+      margin: 34px 0 0 auto;
+      color: var(--gray);
+      font-family: var(--serif);
+      font-size: clamp(1rem, 1.55vw, 1.28rem);
+      line-height: 1.9;
+    }
+    .gold-rule { width: 88px; height: 1px; margin-top: 34px; background: var(--gold); }
+
+    /* BLOQUE DE VIDEO */
+    .video-section {
+      min-height: auto;
+      padding-top: 9vh;
+      padding-bottom: 16vh;
+    }
+    .video-frame {
+      position: relative;
+      width: min(1380px, 100%);
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      border: 1px solid rgba(212,175,55,.18);
+      background:
+        linear-gradient(rgba(5,5,5,.25), rgba(5,5,5,.65)),
+        radial-gradient(circle at 50% 45%, #26231c, #10100f 55%, #080808 100%);
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+      overflow: hidden;
+    }
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+    .video-order {
+      margin: 0 0 18px;
+      color: rgba(212,175,55,.72);
+      text-align: center;
+      font-size: .62rem;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+    }
+    .video-divider {
+      width: 1px;
+      height: 58px;
+      margin: 0 auto 38px;
+      background: linear-gradient(to bottom, transparent, rgba(212,175,55,.48));
+    }
+    .placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .placeholder-mark {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 22px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(212,175,55,.55);
+      border-radius: 50%;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    .placeholder strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      font-weight: 500;
+    }
+    .placeholder small { display: block; margin-top: 10px; color: #88847c; letter-spacing: .12em; text-transform: uppercase; }
+    .message {
+      max-width: 780px;
+      margin: clamp(58px, 8vw, 110px) auto 0;
+      text-align: center;
+    }
+    .message-label { color: var(--gold-muted); font-size: .64rem; letter-spacing: .35em; text-transform: uppercase; }
+    .message p {
+      margin: 24px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2.7vw, 2.55rem);
+      line-height: 1.55;
+      color: #e5dfd4;
+    }
+
+    /* BANNER CINEMATOGRÁFICO */
+    .story-banner {
+      position: relative;
+      width: min(1380px, 100%);
+      height: clamp(260px, 46vw, 610px);
+      margin: clamp(52px, 8vw, 100px) auto 0;
+      border: 1px solid rgba(212,175,55,.22);
+      overflow: hidden;
+      background: #090909;
+      box-shadow: 0 34px 110px rgba(0,0,0,.62);
+    }
+    .story-banner img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center 24%;
+      filter: saturate(.76) contrast(1.06) brightness(.72);
+      transform: scale(1.025);
+    }
+    .story-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(to right, rgba(8,8,8,.68), transparent 24%, transparent 76%, rgba(8,8,8,.68)),
+        linear-gradient(to top, rgba(8,8,8,.7), transparent 35%, rgba(8,8,8,.14));
+    }
+    .story-banner-caption {
+      position: absolute;
+      left: clamp(22px, 5vw, 72px);
+      bottom: clamp(20px, 5vw, 62px);
+      z-index: 2;
+      max-width: 530px;
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 2.1vw, 2rem);
+      font-style: italic;
+      line-height: 1.5;
+      text-shadow: 0 3px 22px #000;
+    }
+
+    /* CAPÍTULOS INDEPENDIENTES */
+    .chapter-panel { display: none; min-height: 100svh; }
+    .chapter-panel.active { display: block; animation: chapterEnter 1s var(--ease) both; }
+    .chapter-stage { opacity: 1; transition: opacity .48s var(--ease), filter .48s var(--ease); }
+    .chapter-stage.switching { opacity: 0; filter: blur(9px); }
+    .chapter-controls {
+      width: min(1080px, calc(100% - 36px));
+      margin: 30px auto 0;
+      padding: 36px 0 46px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      border-top: 1px solid rgba(212,175,55,.18);
+    }
+    .chapter-controls button {
+      min-width: min(220px, 42vw);
+      padding: 13px 18px;
+      border: 1px solid rgba(212,175,55,.52);
+      color: var(--ivory);
+      background: rgba(8,8,8,.72);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .64rem;
+      cursor: pointer;
+      transition: background .35s, color .35s, border-color .35s, transform .35s, opacity .35s;
+    }
+    .chapter-controls button:hover { background: var(--gold); color: #080808; border-color: var(--gold); transform: translateY(-2px); }
+    .chapter-controls button:disabled { opacity: 0; pointer-events: none; }
+    .chapter-status {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 56;
+      transform: translateX(-50%);
+      color: rgba(238,233,223,.42);
+      font-size: .56rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .instructions {
+      max-width: 760px;
+      margin: clamp(48px, 7vw, 84px) auto 0;
+      padding: clamp(26px, 4vw, 42px);
+      border: 1px solid rgba(212,175,55,.22);
+      background: linear-gradient(145deg, rgba(212,175,55,.045), rgba(255,255,255,.012));
+      text-align: left;
+    }
+    .instructions h3 {
+      margin: 0 0 24px;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2.3vw, 2rem);
+      font-weight: 500;
+    }
+    .instructions p {
+      position: relative;
+      margin: 15px 0;
+      padding-left: 28px;
+      color: var(--gray);
+      font-size: clamp(.88rem, 1.35vw, 1rem);
+      line-height: 1.75;
+    }
+    .instructions p::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .75em;
+      width: 13px;
+      height: 1px;
+      background: var(--gold-muted);
+    }
+    @keyframes chapterEnter {
+      from { opacity: 0; filter: blur(12px); transform: translateY(16px); }
+      to { opacity: 1; filter: blur(0); transform: translateY(0); }
+    }
+    /* FINAL */
+    .epilogue {
+      min-height: 125svh;
+      text-align: center;
+      background: linear-gradient(to bottom, transparent, rgba(212,175,55,.025) 40%, #050505);
+    }
+    .final-photo {
+      position: relative;
+      width: min(760px, 88vw);
+      aspect-ratio: 4 / 5;
+      margin: 58px auto;
+      border: 1px solid rgba(212,175,55,.25);
+      background: radial-gradient(circle at 50% 35%, #26231e, #111 58%, #090909);
+      overflow: hidden;
+    }
+    .final-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .final-photo .placeholder { background: linear-gradient(to top, rgba(0,0,0,.38), transparent); }
+    .final-lines { max-width: 850px; margin: 0 auto; }
+    .final-lines p {
+      margin: 0 0 32px;
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 3vw, 3rem);
+      line-height: 1.45;
+    }
+    .final-lines .last { color: var(--gold); font-style: italic; }
+    footer {
+      padding: 42px 20px 60px;
+      color: #66635d;
+      text-align: center;
+      font-size: .62rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    /* APARICIÓN AL HACER SCROLL */
+    .reveal {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(34px);
+      transition: opacity 1.25s var(--ease), filter 1.25s var(--ease), transform 1.25s var(--ease);
+    }
+    .reveal.in-view { opacity: 1; filter: blur(0); transform: translateY(0); }
+
+    @keyframes openingLight {
+      0% { opacity: 0; transform: scale(1.06); }
+      45% { opacity: .72; }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes titleFromShadows {
+      0% { opacity: 0; filter: blur(22px); transform: translateY(18px) scale(.985); text-shadow: 0 0 55px #000; }
+      45% { opacity: .48; filter: blur(8px); }
+      100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); text-shadow: 0 2px 22px rgba(0,0,0,.72); }
+    }
+    @keyframes shadowFade {
+      0% { opacity: 0; filter: blur(14px); transform: translateY(12px); }
+      50% { opacity: .42; filter: blur(5px); }
+      100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+    }
+    @keyframes lineFromDarkness {
+      0% { width: 0; opacity: 0; filter: blur(5px); }
+      35% { opacity: .35; }
+      100% { width: min(300px, 58vw); opacity: 1; filter: blur(0); }
+    }
+
+    @media (max-width: 720px) {
+      .chapter-indicator { display: none; }
+      section { padding-left: 22px; padding-right: 22px; }
+      .chapter-intro { margin-left: 0; }
+      .video-frame { width: 100vw; margin-left: calc(50% - 50vw); border-left: 0; border-right: 0; }
+      .opening h1 { letter-spacing: .015em; }
+      .final-photo { width: 100%; }
+      .chapter-controls { padding-left: 12px; padding-right: 12px; }
+      .chapter-controls button { min-width: 0; width: 46%; padding: 12px 8px; letter-spacing: .11em; font-size: .58rem; }
+      .chapter-status { bottom: 10px; }
+      .story-banner { width: 100vw; margin-left: calc(50% - 50vw); border-left: 0; border-right: 0; }
+      .story-banner img { object-position: center 20%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="opening" id="opening">
+    <div class="opening-inner">
+      <p class="eyebrow">Una historia para Issis</p>
+      <h1>UN ÚLTIMO<br>CAPÍTULO</h1>
+      <div class="opening-line"></div>
+      <p class="opening-copy">Toda historia merece una última oportunidad para ser contada.</p>
+      <button class="begin-btn" id="beginBtn">Comenzar</button>
+    </div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <nav class="chapter-indicator" aria-label="Capítulos">
+    <a href="#prologo" aria-label="Prólogo"></a>
+    <a href="#capitulo-1" aria-label="Capítulo I"></a>
+    <a href="#capitulo-2" aria-label="Capítulo II"></a>
+    <a href="#capitulo-3" aria-label="Capítulo III"></a>
+    <a href="#capitulo-4" aria-label="Capítulo IV"></a>
+    <a href="#epilogo" aria-label="Epílogo"></a>
+  </nav>
+
+  <main id="story">
+    <section class="chapter" id="prologo" data-chapter="Prólogo">
+      <div class="content reveal">
+        <span class="section-number">Prólogo</span>
+        <h2>Hay historias que no terminan cuando dejamos de contarlas.</h2>
+        <div class="gold-rule"></div>
+        <p class="chapter-intro">Esta no pretende reescribir el pasado. Solo reunir, con calma y honestidad, algunas palabras que durante demasiado tiempo permanecieron en silencio.</p>
+        <div class="story-banner reveal">
+          <img src="https://res.cloudinary.com/ierrcdtv/image/upload/v1784584235/Gemini_Generated_Image_um1btgum1btgum1b_bvokzj.png" alt="Chuck y Blair" loading="eager">
+          <div class="story-banner-caption">Algunas historias parecen ficción hasta que reconocemos en ellas una parte de nosotros.</div>
+        </div>
+        <aside class="instructions reveal" aria-label="Instrucciones de navegación">
+          <h3>Breves instrucciones</h3>
+          <p>Para leer y ver cada capítulo, avanza desplazándote hacia abajo.</p>
+          <p>Al llegar al final encontrarás los botones para continuar al siguiente capítulo o regresar al anterior.</p>
+          <p>Los controles aparecen únicamente al final de cada capítulo para no interrumpir la historia.</p>
+        </aside>
+      </div>
+    </section>
+    <section class="chapter" id="capitulo-1" data-chapter="Capítulo I">
+      <div class="content reveal">
+        <span class="section-number">Capítulo I</span>
+        <h2>Una nueva historia comienza...</h2>
+        <p class="chapter-intro">A veces una historia comienza mucho antes de que sepamos reconocerla. Este es el primer paso de vuelta hacia lo que todavía importa.</p>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 1 del capítulo 1">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 01</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784415921/RUFUS_CAMINANDO_pepdk5.mp4" aria-label="Rufus Caminando"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">El comienzo</span>
+          <p>Llevo días caminando solo, intentando mantenerme ocupado para no enfrentar lo inevitable. Pero, incluso entre tantas distracciones, siempre termino en el mismo lugar: te extraño.</p>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="capitulo-2" data-chapter="Capítulo II">
+      <div class="content reveal">
+        <span class="section-number">Capítulo II</span>
+        <h2>Lo que perdimos.</h2>
+        <p class="chapter-intro">Los recuerdos dejan de ser escenas aisladas y empiezan a revelar aquello que faltó: palabras, acciones y la valentía de sostener lo que sentíamos.</p>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 1 del capítulo 2">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 02</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784415922/SERENA_PERDONAME_gkqm6e.mp4" aria-label="Serena Perdoname"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Lo que esperaba</span>
+          <p>Lo cierto es que durante mucho tiempo esperé algo así: una disculpa sincera, una señal de vida, una razón para quedarme. Tú sabes lo que siento por ti, pero también necesito estabilidad y que las palabras encuentren respaldo en las acciones.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 2 del capítulo 2">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 03</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784415921/CHUCK_DILO_hkjxwj.mp4" aria-label="Chuck Dilo"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Un extraño paralelismo</span>
+          <p>Esta escena tiene para mí una carga emocional difícil de explicar. Sin haber visto todavía este capítulo, nosotros vivimos un paralelismo sorprendente. Cuando finalmente lo vi, solo y mientras avanzaba en la serie, sentí felicidad, nostalgia y ese matiz agridulce de recordar que tú ya me lo habías dicho. Hoy estamos separados y, hasta ahora, no había podido hablar contigo de lo mucho que significó para mí.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 3 del capítulo 2">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 04</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784415918/CHUCK_CORTEJO_qtiv3r.mp4" aria-label="Chuck Cortejo"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Bajar las defensas</span>
+          <p>Por ti bajé muchas de mis banderas y aprendí a mirar algunas cosas de otra manera. Solo te pedí una cosa, y todavía la deseo. Pero también entiendo que no puedo pedirte que cambies si aún no estás lista para recibir el amor que mereces.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 4 del capítulo 2">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 05</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416171/CHUCK_ESPERAR_fw5xga.mp4" aria-label="Chuck Esperar"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Antes de rendirme</span>
+          <p>Quisiera poder decirte estas palabras frente a frente. No sé marcharme sin antes haber luchado por este amor tan intenso, contradictorio y profundamente nuestro.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 5 del capítulo 2">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 06</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416169/CHUCK_ELLACONOTRO_rxnfz5.mp4" aria-label="Chuck Ellaconotro"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Lo que permanece</span>
+          <p>Quiero que sepas algo sencillo, aunque no sea fácil decirlo: no consigo imaginar una versión de mí en la que deje de amarte.</p>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="capitulo-3" data-chapter="Capítulo III">
+      <div class="content reveal">
+        <span class="section-number">Capítulo III</span>
+        <h2>Lo que nunca te dije.</h2>
+        <p class="chapter-intro">Aquí ya no hay personajes detrás de los cuales esconderse. Solo quedan las palabras que debí pronunciar cuando todavía estábamos frente a frente.</p>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 1 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 07</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416167/CHUCK_TENECESITO_hhe3k8.mp4" aria-label="Chuck Tenecesito"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Sin defensas</span>
+          <p>Comienzo este capítulo eligiendo ser vulnerable. Bajo mis defensas para decirte algo que, hoy por hoy, ya no puedo seguir evitando: te necesito en mi vida.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 2 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 08</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416169/CHUCKDISCULPA_b416kf.mp4" aria-label="Chuckdisculpa"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Mi disculpa</span>
+          <p>Perdón por perder la calma cuando se trata de ti y tu nombre está de por medio. Perdón por volverme irracional, por no buscarte cuando te molestas y quizá solo esperas que dé el primer paso, y por permitir que el orgullo nos deje en silencio. Perdón por amarte con tanta intensidad y, sobre todo, por volver a luchar por lo nuestro.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 3 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 09</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416051/CHUCK_AMOTUBEBE_jqgu5b.mp4" aria-label="Chuck Amotubebe"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Lo que no supe decir</span>
+          <p>Sé que este video puede abrir heridas que todavía no han terminado de cerrar. Yo tampoco he superado del todo lo que ocurrió, y lamento no haber tenido la calma necesaria para acompañarte mejor. Si pudiera regresar a ese momento, me habría gustado decirte que habría amado a ambos, sin importar las circunstancias. Al ver esta escena entendí que hubo una frase que nunca alcancé a pronunciar; no porque no la sintiera, sino porque los dos intentábamos sobrevivir a algo que nos sobrepasaba. Ese bebé también formaba parte de mis sueños.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 4 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 10</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416062/CHUCKYBLAIR_wreu9z.mp4" aria-label="Chuckyblair"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Tu felicidad</span>
+          <p>Tal vez ahora entiendas por qué te dije aquello. Si tu felicidad no me incluye, aprenderé a brindar por ella incluso desde lejos. Pero no permitas que nadie te haga dudar de algo que para mí siempre ha sido evidente: eres la mujer más hermosa del mundo, y una parte de mí siempre te amará.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 5 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 11</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416050/CHUCK_ABANDONO_m4kbte.mp4" aria-label="Chuck Abandono"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Aquellas noches</span>
+          <p>Debí decirlo hace meses. La vulnerabilidad de Chuck en esta escena refleja con precisión lo que sentí durante aquellas noches, aunque el orgullo me impidiera admitirlo: no te vayas.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 6 del capítulo 3">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 12</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784415919/BLAIRNOTEAMO_ctxsji.mp4" aria-label="Blairnoteamo"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">A pesar de la distancia</span>
+          <p>Que no hayamos estado juntos no significa que haya dejado de amarte. Incluso en la distancia, ese sentimiento siguió acompañándome todo este tiempo.</p>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="capitulo-4" data-chapter="Capítulo IV">
+      <div class="content reveal">
+        <span class="section-number">Capítulo IV</span>
+        <h2>Si todavía existe una oportunidad...</h2>
+        <p class="chapter-intro">No es una exigencia ni una promesa imposible. Es una puerta entreabierta para preguntarnos, con sinceridad, si todavía queda algo que podamos construir mejor.</p>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 1 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 13</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416056/DAN_CAMINANDO_b5krud.mp4" aria-label="Dan Caminando"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Una pregunta pendiente</span>
+          <p>Quizá la razón por la que nos evitamos es que todavía cuesta aceptar lo que sentimos. Y como esta historia también merece un poco de atrevimiento, te dejo una pregunta: ¿un beso más para comprobarlo?</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 2 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 14</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416145/DAN_TEQUIERO_ijanpv.mp4" aria-label="Dan Tequiero"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Sin rodeos</span>
+          <p>Antes de seguir avanzando, y ahora que has llegado hasta aquí, quiero dejar algo completamente claro: te quiero.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 3 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 15</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416048/CHUCK_NOMEIRE_ae5dlg.mp4" aria-label="Chuck Nomeire"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Tu corazón</span>
+          <p>Después de todo lo dicho, solo queda una pregunta que nadie puede responder por ti: ¿dónde está tu corazón?</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 4 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 16</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416167/CHUCK_DEJARIATODO_ksvgin.mp4" aria-label="Chuck Dejariatodo"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">El siguiente paso</span>
+          <p>He cambiado muchas cosas por ti y, sobre todo, por la persona que quiero ser a tu lado. Tal vez haya llegado el momento de preguntarnos, sin presión y con honestidad, si estamos listos para dar el siguiente paso.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 5 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 17</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416050/PRINCIPE_TEQUIERO_icybfz.mp4" aria-label="Principe Tequiero"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Cambiar juntos</span>
+          <p>Te quiero, Issis. Pero solo podría funcionar si ambos estamos dispuestos a cambiar juntos, aprender de nuevo a conocernos y construir una forma más sana de vivir lo nuestro.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 6 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 18</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416145/PRINCIPE_JEFE_tblzi1.mp4" aria-label="Principe Jefe"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">La razón</span>
+          <p>A estas alturas quizá te preguntes por qué hago todo esto ahora y por qué he decidido mostrar tanto. La respuesta es más sencilla de lo que parece: ¿cuál es el sentido de ser todo lo que dicen que soy si no soy capaz de obedecer a mi corazón cuando realmente importa?</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 7 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 19</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416144/CHUCK_SOLOQUIEROCONTIGO_ob9gb1.mp4" aria-label="Chuck Soloquierocontigo"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Sin fingir</span>
+          <p>No voy a fingir indiferencia: me cuesta imaginarte con alguien más. La verdad, sin adornos, es que todavía quiero estar contigo.</p>
+        </div>
+      </div>
+    </section>
+    <section class="video-section" aria-label="Video 8 del capítulo 4">
+      <div class="content">
+        <div class="video-order reveal"><div class="video-divider"></div>Escena 20</div>
+        <div class="video-frame reveal">
+          <video controls playsinline preload="none" src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784416049/CHUCK_COLLAR_ps61ut.mp4" aria-label="Chuck Collar"></video>
+        </div>
+        <div class="message reveal">
+          <span class="message-label">Para alguien especial</span>
+          <p>Quiero cerrar este capítulo con un gesto que diga lo que tantas palabras no alcanzan a explicar. Algo así solo podría nacer pensando en alguien tan especial como tú.</p>
+        </div>
+      </div>
+    </section>
+    <section class="epilogue" id="epilogo" data-chapter="Epílogo">
+      <div class="content">
+        <div class="reveal">
+          <span class="section-number">Epílogo</span>
+          <h2 style="font-family:var(--serif);font-size:clamp(2.8rem,7vw,7rem);font-weight:500;margin:20px 0 0;">Lo que queda después.</h2>
+        </div>
+        <div class="final-photo reveal">
+          <img src="https://res.cloudinary.com/ierrcdtv/image/upload/v1784583680/ISSIS_h1yyxd.jpg" alt="Jesús e Issis" loading="lazy">
+        </div>
+        <div class="final-lines">
+          <p class="reveal">Quizá esta historia solo necesitaba una última oportunidad para ser contada.</p>
+          <p class="last reveal">Dos palabras. Tres sílabas. Cinco letras. Solo dilo...</p>
+        </div>
+      </div>
+      <audio id="epilogueMusic" preload="auto">
+        <source src="https://res.cloudinary.com/ierrcdtv/video/upload/v1784585888/pensamientos-version-post-recital-nico-obinu-128k_5WUB7214_dleenv.mp3" type="audio/mpeg">
+      </audio>
+    </section>
+    <footer>One Last Chapter · Una historia para Issis</footer>
+    <div class="chapter-status" id="chapterStatus" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const opening = document.getElementById('opening');
+    const beginBtn = document.getElementById('beginBtn');
+    const story = document.getElementById('story');
+    const progress = document.getElementById('progress');
+    const epilogueMusic = document.getElementById('epilogueMusic');
+    const chapterStatus = document.getElementById('chapterStatus');
+    const chapterStage = document.createElement('div');
+    chapterStage.className = 'chapter-stage';
+
+    /* Agrupa automáticamente cada portada de capítulo con sus videos. */
+    const chapterStarts = [
+      document.getElementById('prologo'),
+      document.getElementById('capitulo-1'),
+      document.getElementById('capitulo-2'),
+      document.getElementById('capitulo-3'),
+      document.getElementById('capitulo-4'),
+      document.getElementById('epilogo')
+    ];
+    const chapterNames = ['Prólogo', 'Capítulo I', 'Capítulo II', 'Capítulo III', 'Capítulo IV', 'Epílogo'];
+    const footer = story.querySelector('footer');
+    story.insertBefore(chapterStage, footer);
+
+    chapterStarts.forEach((startSection, index) => {
+      const panel = document.createElement('div');
+      panel.className = 'chapter-panel';
+      panel.dataset.index = index;
+      chapterStage.appendChild(panel);
+
+      const endSection = chapterStarts[index + 1] || chapterStage;
+      let node = startSection;
+      while (node && node !== endSection) {
+        const next = node.nextElementSibling;
+        panel.appendChild(node);
+        node = next;
+      }
+      if (index === chapterStarts.length - 1 && footer) panel.appendChild(footer);
+
+      const controls = document.createElement('div');
+      controls.className = 'chapter-controls';
+      controls.setAttribute('aria-label', 'Navegación entre capítulos');
+      controls.innerHTML = `
+        <button type="button" class="prev-chapter">← Capítulo anterior</button>
+        <button type="button" class="next-chapter">Siguiente capítulo →</button>`;
+      panel.appendChild(controls);
+    });
+
+    const panels = [...document.querySelectorAll('.chapter-panel')];
+    const prevChapterBtns = [...document.querySelectorAll('.prev-chapter')];
+    const nextChapterBtns = [...document.querySelectorAll('.next-chapter')];
+    const navDots = document.querySelectorAll('.chapter-indicator a');
+    let currentChapter = 0;
+
+    function prepareReveals(panel, forceFirst = false) {
+      const reveals = [...panel.querySelectorAll('.reveal')];
+      reveals.forEach(item => {
+        item.classList.remove('in-view');
+        revealObserver.observe(item);
+      });
+      if (forceFirst) {
+        requestAnimationFrame(() => {
+          reveals.slice(0, 3).forEach(item => item.classList.add('in-view'));
+        });
+      }
+    }
+
+    let musicFade;
+    function startEpilogueMusic() {
+      clearInterval(musicFade);
+      epilogueMusic.volume = 0;
+      epilogueMusic.currentTime = 0;
+      const playPromise = epilogueMusic.play();
+      if (playPromise) playPromise.catch(() => {});
+      musicFade = setInterval(() => {
+        epilogueMusic.volume = Math.min(.34, epilogueMusic.volume + .015);
+        if (epilogueMusic.volume >= .34) clearInterval(musicFade);
+      }, 140);
+    }
+
+    function stopEpilogueMusic() {
+      clearInterval(musicFade);
+      epilogueMusic.pause();
+      epilogueMusic.currentTime = 0;
+      epilogueMusic.volume = 0;
+    }
+
+    function updateChapter(index, instant = false) {
+      if (index < 0 || index >= panels.length || index === currentChapter && !instant) return;
+      if (index === panels.length - 1 && currentChapter !== index) startEpilogueMusic();
+      else if (currentChapter === panels.length - 1 && index !== currentChapter) stopEpilogueMusic();
+
+      const switchPanel = () => {
+        panels.forEach(panel => panel.classList.remove('active'));
+        currentChapter = index;
+        panels[currentChapter].classList.add('active');
+        prepareReveals(panels[currentChapter], currentChapter === 0);
+        navDots.forEach((dot, i) => dot.classList.toggle('active', i === currentChapter));
+        prevChapterBtns.forEach((btn, i) => btn.disabled = i === 0);
+        nextChapterBtns.forEach((btn, i) => {
+          btn.disabled = i === panels.length - 1;
+          btn.textContent = i === panels.length - 2 ? 'Ver epílogo →' : 'Siguiente capítulo →';
+        });
+        chapterStatus.textContent = `${chapterNames[currentChapter]} · ${currentChapter + 1} de ${panels.length}`;
+        window.scrollTo({ top: 0, behavior: instant ? 'auto' : 'smooth' });
+        progress.style.width = `${((currentChapter + 1) / panels.length) * 100}%`;
+        chapterStage.classList.remove('switching');
+      };
+
+      if (instant) return switchPanel();
+      document.querySelectorAll('video').forEach(video => video.pause());
+      chapterStage.classList.add('switching');
+      setTimeout(switchPanel, 470);
+    }
+
+    prevChapterBtns.forEach(btn => btn.addEventListener('click', () => updateChapter(currentChapter - 1)));
+    nextChapterBtns.forEach(btn => btn.addEventListener('click', () => updateChapter(currentChapter + 1)));
+    navDots.forEach((dot, index) => dot.addEventListener('click', event => {
+      event.preventDefault();
+      updateChapter(index);
+    }));
+
+    beginBtn.addEventListener('click', () => {
+      opening.classList.add('hidden');
+      story.classList.add('visible');
+      document.body.style.overflow = '';
+      updateChapter(0, true);
+      requestAnimationFrame(() => {
+        panels[0].classList.add('active');
+        panels[0].querySelectorAll('.reveal').forEach((item, index) => {
+          if (index < 3) item.classList.add('in-view');
+        });
+      });
+    });
+
+    document.body.style.overflow = 'hidden';
+    const startOpeningSequence = () => requestAnimationFrame(() => opening.classList.add('is-ready'));
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(startOpeningSequence).catch(startOpeningSequence);
+    } else {
+      window.addEventListener('load', startOpeningSequence, { once: true });
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll('video').forEach(video => {
+      video.addEventListener('play', () => {
+        document.querySelectorAll('video').forEach(other => {
+          if (other !== video && !other.paused) other.pause();
+        });
+      });
+    });
+
+    updateChapter(0, true);
+  </script>
+</body>
+</html>
